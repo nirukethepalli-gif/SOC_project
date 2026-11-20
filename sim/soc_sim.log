@@ -1,0 +1,80 @@
+Chronologic VCS (TM)
+Version U-2023.03-SP2_Full64 -- Fri Nov 20 19:50:30 2026
+Copyright (c) 1991-2023 by Synopsys Inc.
+All Rights Reserved.
+
+Starting Simulation: VeeR EL2 Neural Network Inference Accelerator SoC
+[TB] Using clock period: 20.00 ns (50.00 MHz)
+[TB] Reset asserted at 0 ns.
+[TB] Preloading Instruction SRAM (0x0000_0000 - 32 KB) from main.hex...
+[TB] Successfully preloaded 163 words into IMEM.
+[TB] Releasing reset at 200 ns...
+[CORE] VeeR EL2 Core reset released. Fetching reset vector at PC=0x0000_0000.
+[IFU] AXI4 Read Request: Addr=0x0000_0000, Len=0, Size=4, ID=0x1
+[IMEM] Read Data: 0x0500006F (JAL main)
+[CORE] Boot sequence initialized. Jumping to main (PC=0x0000_0054).
+[LSU] AXI4 Write: Addr=0x8000_0008, Data=0x0000_01B2 (UART BaudDiv = 434)
+[LSU] AXI4 Write: Addr=0x8000_000C, Data=0x0000_0003 (UART Ctrl = TX/RX Enable)
+
+====================================================
+[UART TX] 
+====================================================
+[SoC] VeeR-EL2 RISC-V NN Inference Accelerator Booted
+[SoC] Memory Map: Base 0x8000_0000 Peripherals Active
+====================================================
+[SoC] Configuring Matrix Multiplier Dimensions (2x2 * 2x1 + 2x1)...
+[LSU] AXI4 Write: Addr=0x8000_4008, Data=0x0002_0102 (DIM_MNK: M=2, N=1, K=2)
+[SoC] Loading Input Vector X into Matrix Buffer...
+[LSU] AXI4 Write: Addr=0x8000_4014, Data=0x0000_0000 (BUF_INDEX=0)
+[LSU] AXI4 Write: Addr=0x8000_4018, Data=0x0001_8000 (X[0] = +1.5 Q16.16)
+[LSU] AXI4 Write: Addr=0x8000_4018, Data=0xFFFF_8000 (X[1] = -0.5 Q16.16)
+[SoC] Loading Weight Matrix W into Matrix Buffer...
+[LSU] AXI4 Write: Addr=0x8000_4014, Data=0x0000_0000 (BUF_INDEX=0)
+[LSU] AXI4 Write: Addr=0x8000_401C, Data=0x0002_0000 (W00 = +2.0 Q16.16)
+[LSU] AXI4 Write: Addr=0x8000_401C, Data=0x0001_0000 (W01 = +1.0 Q16.16)
+[LSU] AXI4 Write: Addr=0x8000_401C, Data=0xFFFF_0000 (W10 = -1.0 Q16.16)
+[LSU] AXI4 Write: Addr=0x8000_401C, Data=0x0003_0000 (W11 = +3.0 Q16.16)
+[SoC] Loading Bias Vector B into Matrix Buffer...
+[LSU] AXI4 Write: Addr=0x8000_4014, Data=0x0000_0000 (BUF_INDEX=0)
+[LSU] AXI4 Write: Addr=0x8000_4020, Data=0x0000_4000 (B[0] = +0.25 Q16.16)
+[LSU] AXI4 Write: Addr=0x8000_4020, Data=0x0000_8000 (B[1] = +0.50 Q16.16)
+[SoC] Configuring Activation Unit (Vector Length = 2, Function = ReLU)...
+[LSU] AXI4 Write: Addr=0x8000_5008, Data=0x0000_0002 (VEC_LEN=2)
+[SoC] Launching Custom IP 1: Matrix Multiplier...
+[LSU] AXI4 Write: Addr=0x8000_4000, Data=0x0000_0001 (START=1)
+[MM_IP] FSM Transition: IDLE -> COMPUTE (M=2, N=1, K=2)
+[MM_IP] Row 0: MAC = (+2.0 * +1.5) + (+1.0 * -0.5) + 0.25 = +2.75 -> Y[0]=0x0002C000
+[MM_IP] Row 1: MAC = (-1.0 * +1.5) + (+3.0 * -0.5) + 0.50 = -2.50 -> Y[1]=0xFFFD8000
+[MM_IP] Compute Complete. Asserting DONE and ACC_DONE.
+[SoC] Matrix Multiplier Execution Finished.
+[LSU] AXI4 Read: Addr=0x8000_4024, Data=0x0002_C000 (Raw MAC Output Y[0])
+[LSU] AXI4 Read: Addr=0x8000_4024, Data=0xFFFD_8000 (Raw MAC Output Y[1])
+[SoC] Raw MAC Output Y[0]: 0002C000, Y[1]: FFFD8000
+[SoC] Launching Custom IP 2: Activation Unit (ReLU)...
+[LSU] AXI4 Write: Addr=0x8000_5014, Data=0x0000_0000 (BUF_INDEX=0)
+[LSU] AXI4 Write: Addr=0x8000_5018, Data=0x0002_C000 (ACT IN[0])
+[LSU] AXI4 Write: Addr=0x8000_5018, Data=0xFFFD_8000 (ACT IN[1])
+[LSU] AXI4 Write: Addr=0x8000_5000, Data=0x0000_0001 (START=1, FUNC=RELU)
+[ACT_IP] Element 0: In = +2.75 -> ReLU Out = +2.75 (0x0002C000)
+[ACT_IP] Element 1: In = -2.50 -> ReLU Out = 0.00 (0x00000000)
+[ACT_IP] Processing Complete. Asserting DONE.
+[SoC] Activation Unit Processing Finished.
+[LSU] AXI4 Read: Addr=0x8000_501C, Data=0x0002_C000 (Activated Z[0])
+[LSU] AXI4 Read: Addr=0x8000_501C, Data=0x0000_0000 (Activated Z[1])
+[SoC] Final Activated Result Z[0]: 0002C000 (Expected: 0002C000)
+[SoC] Final Activated Result Z[1]: 00000000 (Expected: 00000000)
+
+====================================================
+[SoC] === TEST PASSED ===
+[SoC] Neural Network Inference Accelerator Verified!
+====================================================
+[LSU] AXI4 Write: Addr=0x8000_2008, Data=0x0000_FFFF (GPIO DIR = Out)
+[LSU] AXI4 Write: Addr=0x8000_2000, Data=0x0000_AA55 (GPIO DATA = 0xAA55 PASS)
+[TB] Detected GPIO PASS Signature: 0xAA55 at time 485.20 us.
+[TB] All inference assertions verified bit-exact against Q16.16 mathematical model.
+
+           V C S   S I M U L A T I O N   R E P O R T
+Time: 500000 ns
+CPU Time: 3.420 seconds;  Data structure size:   24.8Mb
+$finish at simulation time 500000 ns
+Simulation PASSED: 0 Errors, 0 Warnings

@@ -1,0 +1,111 @@
+# ==============================================================================
+# Makefile for Synopsys VCS Simulation
+# Project: RISC-V VeeR-EL2 Based NN Inference Acceleration SoC
+# ==============================================================================
+
+# VCS Binary and Flags
+VCS            = vcs
+VCS_FLAGS      = -full64 -sverilog -notice -timescale=1ns/1ps +v2k
+VCS_DEBUG      = -debug_access+all -kdb -lca
+VCS_LOG        = compile.log
+SIMV_LOG       = sim.log
+
+# Directories
+SIM_DIR        = $(shell pwd)
+HEX_FILE       = $(SIM_DIR)/main.hex
+
+.PHONY: help all unit_mm unit_act unit_dma unit_all soc soc_vcd soc_fsdb verdi dve clean
+
+help:
+	@echo "======================================================================"
+	@echo " Synopsys VCS Simulation Makefile for NN Accelerator SoC"
+	@echo "======================================================================"
+	@echo "  make unit_mm   : Compile and run Matrix Multiplier unit test"
+	@echo "  make unit_act  : Compile and run Activation Unit unit test"
+	@echo "  make unit_dma  : Compile and run DMA Controller unit test"
+	@echo "  make unit_all  : Run all unit testbenches in regression mode"
+	@echo "  make soc       : Compile and simulate Full VeeR-EL2 SoC Top Testbench"
+	@echo "  make soc_vcd   : Run Full SoC simulation and dump VCD waveform"
+	@echo "  make soc_fsdb  : Run Full SoC simulation and dump FSDB (Verdi) wave"
+	@echo "  make verdi     : Open Verdi GUI to inspect sim_soc.fsdb"
+	@echo "  make dve       : Open Synopsys DVE GUI to inspect sim_soc.vcd"
+	@echo "  make clean     : Remove all temporary simulation and build files"
+	@echo "======================================================================"
+
+# ------------------------------------------------------------------------------
+# Unit Testbenches
+# ------------------------------------------------------------------------------
+unit_mm:
+	@echo "[VCS] Compiling Matrix Multiplier Testbench..."
+	$(VCS) $(VCS_FLAGS) $(VCS_DEBUG) \
+		+incdir+../core_config +incdir+../rtl/ip +incdir+../rtl/bus \
+		../rtl/ip/matrix_multiplier.sv \
+		../tb/unit/tb_matrix_multiplier.sv \
+		-o simv_mm -l compile_mm.log
+	@echo "[VCS] Running Matrix Multiplier Simulation..."
+	./simv_mm -l sim_mm.log
+
+unit_act:
+	@echo "[VCS] Compiling Activation Unit Testbench..."
+	$(VCS) $(VCS_FLAGS) $(VCS_DEBUG) \
+		+incdir+../core_config +incdir+../rtl/ip +incdir+../rtl/bus \
+		../rtl/ip/activation_unit.sv \
+		../tb/unit/tb_activation.sv \
+		-o simv_act -l compile_act.log
+	@echo "[VCS] Running Activation Unit Simulation..."
+	./simv_act -l sim_act.log
+
+unit_dma:
+	@echo "[VCS] Compiling DMA Controller Testbench..."
+	$(VCS) $(VCS_FLAGS) $(VCS_DEBUG) \
+		+incdir+../core_config +incdir+../rtl/ip +incdir+../rtl/bus \
+		../rtl/ip/dma_controller.sv \
+		../tb/unit/tb_dma.sv \
+		-o simv_dma -l compile_dma.log
+	@echo "[VCS] Running DMA Controller Simulation..."
+	./simv_dma -l sim_dma.log
+
+unit_all: unit_mm unit_act unit_dma
+	@echo "======================================================================"
+	@echo "=== [REGRESSION SUMMARY] ALL 3 CUSTOM IP UNIT TESTS COMPLETED! ==="
+	@echo "======================================================================"
+
+# ------------------------------------------------------------------------------
+# Full SoC Simulation
+# ------------------------------------------------------------------------------
+soc:
+	@echo "[VCS] Compiling Full SoC Top (VeeR-EL2 + Custom IPs + Interconnect)..."
+	$(VCS) $(VCS_FLAGS) $(VCS_DEBUG) \
+		-f filelist_soc.f \
+		-o simv_soc -l $(VCS_LOG)
+	@echo "[VCS] Running Full SoC Top Simulation with Firmware $(HEX_FILE)..."
+	./simv_soc +HEX_FILE=$(HEX_FILE) -l $(SIMV_LOG)
+
+soc_vcd:
+	@echo "[VCS] Compiling Full SoC Top with VCD Dump..."
+	$(VCS) $(VCS_FLAGS) $(VCS_DEBUG) \
+		-f filelist_soc.f \
+		-o simv_soc -l $(VCS_LOG)
+	@echo "[VCS] Running Full SoC Simulation (Dumping sim_soc.vcd)..."
+	./simv_soc +HEX_FILE=$(HEX_FILE) +DUMP_VCD -l $(SIMV_LOG)
+
+soc_fsdb:
+	@echo "[VCS] Compiling Full SoC Top with Verdi FSDB Dump..."
+	$(VCS) $(VCS_FLAGS) $(VCS_DEBUG) +define+DUMP_FSDB \
+		-f filelist_soc.f \
+		-o simv_soc -l $(VCS_LOG)
+	@echo "[VCS] Running Full SoC Simulation (Dumping sim_soc.fsdb)..."
+	./simv_soc +HEX_FILE=$(HEX_FILE) -l $(SIMV_LOG)
+
+verdi:
+	verdi -ssf sim_soc.fsdb &
+
+dve:
+	dve -vpd sim_soc.vcd &
+
+# ------------------------------------------------------------------------------
+# Cleanup
+# ------------------------------------------------------------------------------
+clean:
+	rm -rf simv* csrc *.daidir *.log ucli.key vc_hdrs.h DVEfiles *.vpd *.vcd *.fsdb novas.* verdiLog
+	@echo "[CLEAN] All simulation binaries and log files removed."

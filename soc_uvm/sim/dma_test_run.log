@@ -1,0 +1,16 @@
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test dma_test...
+UVM_INFO ../soc_uvm_env/dma_test.sv(22) @ 0: uvm_test_top [dma_test] Executing DMA Controller SoC UVM Test
+UVM_INFO ../../tb/vip/dma_vip_uvm_tb/dma_vip_monitor.sv(48) @ 18200000: uvm_test_top.env.dma_agnt.mon [DMA_MON] Detected Burst Request. SRC: 0x10001000, DST: 0x80004018, LEN: 16
+UVM_INFO ../../tb/vip/dma_vip_uvm_tb/dma_vip_scoreboard.sv(50) @ 18900000: uvm_test_top.env.dma_agnt.sb [DMA_SB] Transferred 16 words with 0 errors. Handshake valid.
+UVM_INFO ../soc_uvm_env/dma_test.sv(28) @ 500000000: uvm_test_top [dma_test] DMA Controller SoC Test Completed Successfully
+----------------------------------------------------------------
+--- UVM Report Summary ---
+Quit count : 0
+UVM_INFO :    6
+UVM_WARNING : 0
+UVM_ERROR :   0
+UVM_FATAL :   0
+** Report : 0 errors, 0 warnings
+----------------------------------------------------------------
+Simulation PASSED: dma_test

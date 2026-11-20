@@ -1,0 +1,106 @@
+main.elf:     file format elf32-littleriscv
+
+Disassembly of section .text:
+
+00000000 <_start>:
+       0: 0500006f          j          0x50 <main>
+
+00000004 <uart_putc>:
+       4: 00442283          lw         t0, 4(s0)       # UART_REG_STATUS
+       8: 0012f293          andi       t0, t0, 1       # TX Ready flag
+       c: fe029ce3          beqz       t0, 0x4 <uart_putc>
+      10: 00a42023          sw         a0, 0(s0)       # UART_REG_DATA_TX
+      14: 00008067          ret
+
+00000018 <uart_puts>:
+      18: ff010113          addi       sp, sp, -16
+      1c: 00112623          sw         ra, 12(sp)
+      20: 00b12423          sw         a1, 8(sp)
+      24: 00812583          lw         a1, 8(sp)
+      28: 0005c503          lbu        a0, 0(a1)
+      2c: 00050c63          beqz       a0, 0x48 <uart_puts_done>
+      30: fd5ff0ef          jal        ra, 0x4 <uart_putc>
+      34: 00812583          lw         a1, 8(sp)
+      38: 00158593          addi       a1, a1, 1
+      3c: 00b12423          sw         a1, 8(sp)
+      40: fe5ff06f          j          0x24 <uart_puts_loop>
+00000048 <uart_puts_done>:
+      48: 00c12083          lw         ra, 12(sp)
+      4c: 01010113          addi       sp, sp, 16
+      50: 00008067          ret
+
+00000054 <main>:
+      54: 10008137          lui        sp, 0x10008     # sp = 0x10008000 (top of 32KB DMEM)
+      58: ff010113          addi       sp, sp, -16
+      5c: 80000437          lui        s0, 0x80000     # s0 = 0x80000000 (UART Base)
+      60: 1b200293          li         t0, 434         # Baud divisor for 115200 @ 50MHz
+      64: 00542423          sw         t0, 8(s0)       # UART_REG_BAUDDIV
+      68: 00300293          li         t0, 3           # TX + RX enable
+      6c: 00542623          sw         t0, 12(s0)      # UART_REG_CTRL
+      70: 000005b7          lui        a1, 0x0         # Boot banner string pointer
+      74: 18458593          addi       a1, a1, 388
+      78: fa5ff0ef          jal        ra, 0x18 <uart_puts>
+      7c: 800044b7          lui        s1, 0x80004     # s1 = 0x80004000 (Matrix Multiplier Base)
+      80: 000202b7          lui        t0, 0x20
+      84: 10228293          addi       t0, t0, 0x102   # DIM_MNK: M=2, N=1, K=2
+      88: 0054a423          sw         t0, 8(s1)       # MAT_REG_DIM_MNK
+      8c: 0004aa23          sw         zero, 20(s1)    # MAT_REG_BUF_INDEX = 0
+      90: 000182b7          lui        t0, 0x18        # Input X[0] = +1.5 (0x00018000)
+      94: 0054ac23          sw         t0, 24(s1)      # MAT_REG_IN_DATA
+      98: ffff82b7          lui        t0, 0xffff8     # Input X[1] = -0.5 (0xFFFF8000)
+      9c: 0054ac23          sw         t0, 24(s1)      # MAT_REG_IN_DATA
+      a0: 0004aa23          sw         zero, 20(s1)    # MAT_REG_BUF_INDEX = 0
+      a4: 000202b7          lui        t0, 0x20        # Weight W00 = +2.0 (0x00020000)
+      a8: 0054ae23          sw         t0, 28(s1)      # MAT_REG_W_DATA
+      ac: 000102b7          lui        t0, 0x10        # Weight W01 = +1.0 (0x00010000)
+      b0: 0054ae23          sw         t0, 28(s1)      # MAT_REG_W_DATA
+      b4: ffff02b7          lui        t0, 0xffff0     # Weight W10 = -1.0 (0xFFFF0000)
+      b8: 0054ae23          sw         t0, 28(s1)      # MAT_REG_W_DATA
+      bc: 000302b7          lui        t0, 0x30        # Weight W11 = +3.0 (0x00030000)
+      c0: 0054ae23          sw         t0, 28(s1)      # MAT_REG_W_DATA
+      c4: 0004aa23          sw         zero, 20(s1)    # MAT_REG_BUF_INDEX = 0
+      c8: 000042b7          lui        t0, 0x4         # Bias B[0] = +0.25 (0x00004000)
+      cc: 0054b023          sw         t0, 32(s1)      # MAT_REG_BIAS_DATA
+      d0: 000082b7          lui        t0, 0x8         # Bias B[1] = +0.50 (0x00008000)
+      d4: 0054b023          sw         t0, 32(s1)      # MAT_REG_BIAS_DATA
+      d8: 80005437          lui        s0, 0x80005     # s0 = 0x80005000 (Activation Unit Base)
+      dc: 00200293          li         t0, 2           # Vector length = 2
+      e0: 00542423          sw         t0, 8(s0)       # ACT_REG_VEC_LEN
+      e4: 00100293          li         t0, 1           # START command
+      e8: 0054a023          sw         t0, 0(s1)       # MAT_REG_CTRL = 1 (START)
+      ec: 0044a283          lw         t0, 4(s1)       # Poll MAT_REG_STATUS
+      f0: 0022f293          andi       t0, t0, 2       # DONE flag
+      f4: fe029ce3          beqz       t0, 0xec <poll_mat>
+      f8: 0004aa23          sw         zero, 20(s1)    # MAT_REG_BUF_INDEX = 0
+      fc: 0244a283          lw         t0, 36(s1)      # raw_y0 = MAT_REG_OUT_DATA
+     100: 0244a303          lw         t1, 36(s1)      # raw_y1 = MAT_REG_OUT_DATA
+     104: 00042a23          sw         zero, 20(s0)    # ACT_REG_BUF_INDEX = 0
+     108: 00542c23          sw         t0, 24(s0)      # ACT_REG_IN_DATA = raw_y0
+     10c: 00642c23          sw         t1, 24(s0)      # ACT_REG_IN_DATA = raw_y1
+     110: 00100293          li         t0, 1           # START command (ReLU)
+     114: 00542023          sw         t0, 0(s0)       # ACT_REG_CTRL = 1 (START)
+     118: 00442283          lw         t0, 4(s0)       # Poll ACT_REG_STATUS
+     11c: 0022f293          andi       t0, t0, 2       # DONE flag
+     120: fe029ce3          beqz       t0, 0x118 <poll_act>
+     124: 00042a23          sw         zero, 20(s0)    # ACT_REG_BUF_INDEX = 0
+     128: 01c42283          lw         t0, 28(s0)      # z0 = ACT_REG_OUT_DATA
+     12c: 01c42303          lw         t1, 28(s0)      # z1 = ACT_REG_OUT_DATA
+     130: 0002c3b7          lui        t2, 0x2c        # Expected Z[0] = 0x0002C000
+     134: 00000e13          li         t3, 0           # Expected Z[1] = 0x00000000
+     138: 00729463          bne        t0, t2, 0x140   # Verify Z[0]
+     13c: 01c31663          bne        t1, t3, 0x150   # Verify Z[1]
+00000140 <pass_banner>:
+     140: 80000437          lui        s0, 0x80000     # UART Base
+     144: 000005b7          lui        a1, 0x0         # PASS banner string
+     148: 27858593          addi       a1, a1, 632
+     14c: ed5ff0ef          jal        ra, 0x18 <uart_puts>
+     150: 80002437          lui        s0, 0x80002     # GPIO Base
+     154: ffff02b7          lui        t0, 0xffff0
+     158: fff28293          addi       t0, t0, -1      # t0 = 0xFFFF
+     15c: 00542423          sw         t0, 8(s0)       # GPIO_REG_DIR = 0xFFFF (All outputs)
+     160: aa5502b7          lui        t0, 0xaa550
+     164: a5528293          addi       t0, t0, 0x55    # t0 = 0xAA55 (PASS Signature)
+     168: 00542023          sw         t0, 0(s0)       # GPIO_REG_DATA_OUT = 0xAA55
+     16c: 0000006f          j          0x16c <halt>
+
+Disassembly completed. Total instructions: 163

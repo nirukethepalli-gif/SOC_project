@@ -1,0 +1,31 @@
+# VCS / EDA simulation binaries and build artifacts
+sim/simv*
+sim/csrc/
+sim/*.daidir/
+sim/verdiLog/
+sim/vcd2fsdbLog/
+soc_uvm/sim/simv*
+soc_uvm/sim/csrc/
+soc_uvm/sim/*.daidir/
+soc_uvm/sim/verdiLog/
+soc_uvm/sim/vcd2fsdbLog/
+vcd2fsdbLog/
+verdiLog/
+csrc/
+*.daidir/
+ucli.key
+vc_hdrs.h
+novas.conf
+novas.rc
+
+# Waveform dumps (can exceed GitHub's 100MB limit)
+*.vcd
+*.vpd
+*.fsdb
+*.wlf
+
+# OS / Editor temporary files
+.DS_Store
+Thumbs.db
+*.swp
+*~

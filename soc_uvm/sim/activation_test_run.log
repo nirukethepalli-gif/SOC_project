@@ -1,0 +1,17 @@
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test activation_test...
+UVM_INFO ../soc_uvm_env/activation_test.sv(22) @ 0: uvm_test_top [activation_test] Executing Activation Unit SoC UVM Test
+UVM_INFO ../../tb/vip/activation_vip_uvm_tb/activation_vip_monitor.sv(55) @ 31200000: uvm_test_top.env.act_agnt.mon [ACT_MON] Detected Activation Start. Mode: ReLU, Length: 2
+UVM_INFO ../../tb/vip/activation_vip_uvm_tb/activation_vip_scoreboard.sv(42) @ 31400000: uvm_test_top.env.act_agnt.sb [ACT_SB] In: 0x0002C000 -> Out: 0x0002C000 (MATCH)
+UVM_INFO ../../tb/vip/activation_vip_uvm_tb/activation_vip_scoreboard.sv(42) @ 31600000: uvm_test_top.env.act_agnt.sb [ACT_SB] In: 0xFFFD8000 -> Out: 0x00000000 (MATCH)
+UVM_INFO ../soc_uvm_env/activation_test.sv(28) @ 500000000: uvm_test_top [activation_test] Activation Unit SoC Test Completed Successfully
+----------------------------------------------------------------
+--- UVM Report Summary ---
+Quit count : 0
+UVM_INFO :    7
+UVM_WARNING : 0
+UVM_ERROR :   0
+UVM_FATAL :   0
+** Report : 0 errors, 0 warnings
+----------------------------------------------------------------
+Simulation PASSED: activation_test

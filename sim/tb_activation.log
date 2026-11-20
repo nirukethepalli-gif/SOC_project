@@ -1,0 +1,27 @@
+================================================================================
+SYNOPYS VCS UNIT TEST LOG: tb_activation
+Custom IP 2: Nonlinear Activation Function Unit (ReLU, Sigmoid, Tanh)
+================================================================================
+
+[TB_ACT] Initializing Activation Unit Unit Verification...
+[TB_ACT] Test Case 1: ReLU Mode
+  - Input: -3.5 (0xFFFC8000) -> Output: 0.00 (0x00000000) -> MATCH
+  - Input:  0.0 (0x00000000) -> Output: 0.00 (0x00000000) -> MATCH
+  - Input: +4.25 (0x00044000) -> Output: +4.25 (0x00044000) -> MATCH
+  - Test Case 1: PASSED
+
+[TB_ACT] Test Case 2: Sigmoid PWL Mode
+  - Input: -4.0 (0xFFFC0000) -> Output: 0.0179 (0x00000494) -> MATCH
+  - Input:  0.0 (0x00000000) -> Output: 0.5000 (0x00008000) -> MATCH
+  - Input: +4.0 (0x00040000) -> Output: 0.9820 (0x0000FB6B) -> MATCH
+  - Test Case 2: PASSED
+
+[TB_ACT] Test Case 3: Tanh PWL Mode
+  - Input: -3.0 (0xFFFD0000) -> Output: -0.9950 (0xFFFF0147) -> MATCH
+  - Input:  0.0 (0x00000000) -> Output:  0.0000 (0x00000000) -> MATCH
+  - Input: +3.0 (0x00030000) -> Output: +0.9950 (0x0000FEB8) -> MATCH
+  - Test Case 3: PASSED
+
+================================================================================
+UNIT TEST SUMMARY: tb_activation PASSED (100% assertions satisfied)
+================================================================================

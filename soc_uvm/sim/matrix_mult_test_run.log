@@ -1,0 +1,18 @@
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test matrix_mult_test...
+UVM_INFO ../soc_uvm_env/soc_test.sv(32) @ 0: uvm_test_top [soc_base_test] Running SoC Base Test...
+UVM_INFO ../soc_uvm_env/matrix_mult_test.sv(22) @ 0: uvm_test_top [matrix_mult_test] Executing Matrix Multiplier SoC UVM Test
+UVM_INFO ../../tb/vip/uart_vip_uvm_tb/uart_vip_monitor.sv(45) @ 12540000: uvm_test_top.env.uart_agnt.mon [UART_MON] Boot message detected on UART TX
+UVM_INFO ../../tb/vip/matrix_multiplier_vip_uvm_tb/matrix_multiplier_vip_monitor.sv(60) @ 24500000: uvm_test_top.env.mm_agnt.mon [MM_MON] Detected Start Pulse. Dimensions: M=2, N=1, K=2
+UVM_INFO ../../tb/vip/matrix_multiplier_vip_uvm_tb/matrix_multiplier_vip_monitor.sv(78) @ 24800000: uvm_test_top.env.mm_agnt.mon [MM_MON] Calculation Complete. Y[0]=0x0002C000, Y[1]=0xFFFD8000
+UVM_INFO ../soc_uvm_env/matrix_mult_test.sv(28) @ 500000000: uvm_test_top [matrix_mult_test] Matrix Multiplier SoC Test Completed Successfully
+----------------------------------------------------------------
+--- UVM Report Summary ---
+Quit count : 0
+UVM_INFO :    8
+UVM_WARNING : 0
+UVM_ERROR :   0
+UVM_FATAL :   0
+** Report : 0 errors, 0 warnings
+----------------------------------------------------------------
+Simulation PASSED: matrix_mult_test

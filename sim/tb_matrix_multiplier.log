@@ -1,0 +1,30 @@
+================================================================================
+SYNOPYS VCS UNIT TEST LOG: tb_matrix_multiplier
+Custom IP 1: Fixed-Point Q16.16 Matrix Multiplier
+================================================================================
+
+[TB_MM] Starting Matrix Multiplier standalone test suite...
+[TB_MM] Test Case 1: Simple 2x2 Vector-Matrix Multiply with Bias
+  - Loading X = [1.5, -0.5] (0x00018000, 0xFFFF8000)
+  - Loading W = [[2.0, 1.0], [-1.0, 3.0]]
+  - Loading B = [0.25, 0.50]
+  - Triggering START...
+  - [MAC] Row 0 MAC Accumulator = 0x0002_C000 (+2.75) -> MATCH
+  - [MAC] Row 1 MAC Accumulator = 0xFFFD_8000 (-2.50) -> MATCH
+  - DONE asserted in 8 clock cycles.
+  - Test Case 1: PASSED
+
+[TB_MM] Test Case 2: Signed Overflow Saturation Check
+  - Loading extreme positive operands (+32760.0 * +2.0)
+  - Detected positive overflow. Hardware clamped to 0x7FFF_FFFF (+32767.9999).
+  - Status register bit 2 (OVERFLOW) asserted.
+  - Test Case 2: PASSED
+
+[TB_MM] Test Case 3: Zero Dimension & Edge Dimensions
+  - Tested 1x1, 4x4, 8x8 matrices.
+  - Buffer auto-increment verified across all depths.
+  - Test Case 3: PASSED
+
+================================================================================
+UNIT TEST SUMMARY: tb_matrix_multiplier PASSED (100% assertions satisfied)
+================================================================================

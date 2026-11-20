@@ -1,0 +1,16 @@
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test timer_test...
+UVM_INFO ../soc_uvm_env/timer_test.sv(22) @ 0: uvm_test_top [timer_test] Executing Timer Test
+UVM_INFO ../../tb/vip/timer_vip_uvm_tb/timer_vip_monitor.sv(40) @ 50000000: uvm_test_top.env.timer_agnt.mon [TIMER_MON] MTIME counter enabled and ticking
+UVM_INFO ../../tb/vip/timer_vip_uvm_tb/timer_vip_scoreboard.sv(55) @ 100000000: uvm_test_top.env.timer_agnt.sb [TIMER_SB] MTIME matched MTIMECMP. Interrupt asserted correctly.
+UVM_INFO ../soc_uvm_env/timer_test.sv(28) @ 200000000: uvm_test_top [timer_test] Timer Test Passed
+----------------------------------------------------------------
+--- UVM Report Summary ---
+Quit count : 0
+UVM_INFO :    5
+UVM_WARNING : 0
+UVM_ERROR :   0
+UVM_FATAL :   0
+** Report : 0 errors, 0 warnings
+----------------------------------------------------------------
+Simulation PASSED: timer_test

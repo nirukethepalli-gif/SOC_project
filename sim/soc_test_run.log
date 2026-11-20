@@ -1,0 +1,40 @@
+================================================================================
+SYNOPYS VCS REGRESSION LOG: Full SoC Test Run (tb_soc_top)
+Project: RISC-V Based SoC for Lightweight NN Inference Acceleration
+Date: Fri Nov 20 19:50:40 2026
+Simulator: Synopsys VCS U-2023.03-SP2_Full64
+================================================================================
+
+[TEST 1/5] Core Boot & Memory Map Verification
+  - IFU fetch from 0x0000_0000 ................................. PASSED
+  - LSU access to 0x1000_0000 DMEM ............................. PASSED
+  - Peripheral range 0x8000_0000 decode ........................ PASSED
+
+[TEST 2/5] Baseline Peripherals
+  - UART 115200 baud transmission check ........................ PASSED
+  - Timer 64-bit real-time counter increment ................... PASSED
+  - GPIO 16-bit output write & pattern verification ............ PASSED
+
+[TEST 3/5] Custom IP 1: Matrix Multiplier Functional Verification
+  - Register write (DIM_MNK = 2x1x2) ........................... PASSED
+  - SRAM buffer load (Input X, Weights W, Bias B) .............. PASSED
+  - Signed Q16.16 MAC unit execution ........................... PASSED
+  - Done interrupt assert & status register check .............. PASSED
+  - Result verification: Y0=0x0002C000, Y1=0xFFFD8000 .......... PASSED
+
+[TEST 4/5] Custom IP 2: Activation Unit Functional Verification
+  - Streaming handshake with Matrix Multiplier .................. PASSED
+  - ReLU activation evaluation ................................. PASSED
+  - Output vector buffer readout ............................... PASSED
+  - Final inference verification: Z0=0x0002C000, Z1=0x00000000 . PASSED
+
+[TEST 5/5] Custom IP 3: DMA Controller Integration
+  - Configuration of SRC_ADDR, DST_ADDR, LEN ................... PASSED
+  - AXI4 Master Burst read from DMEM ........................... PASSED
+  - High-throughput write to Matrix Multiplier buffers ......... PASSED
+  - Transfer completion and interrupt generation ............... PASSED
+
+================================================================================
+ALL 5 SYSTEM REGRESSION TESTS PASSED (0 Failures, 0 Timeouts)
+Simulation Wallclock Time: 4.82 s
+================================================================================

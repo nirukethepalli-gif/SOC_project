@@ -1,0 +1,17 @@
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test uart_connectivity_test...
+UVM_INFO ../soc_uvm_env/uart_connectivity_test.sv(22) @ 0: uvm_test_top [uart_connectivity_test] Executing UART Connectivity Test
+UVM_INFO ../../tb/vip/uart_vip_uvm_tb/uart_vip_monitor.sv(65) @ 43400000: uvm_test_top.env.uart_agnt.mon [UART_MON] Byte received: 0x0A ('\n')
+UVM_INFO ../../tb/vip/uart_vip_uvm_tb/uart_vip_monitor.sv(65) @ 86800000: uvm_test_top.env.uart_agnt.mon [UART_MON] Byte received: 0x3D ('=')
+UVM_INFO ../../tb/vip/uart_vip_uvm_tb/uart_vip_scoreboard.sv(80) @ 250000000: uvm_test_top.env.uart_agnt.sb [UART_SB] Total bytes received: 148, Frame errors: 0, Overruns: 0
+UVM_INFO ../soc_uvm_env/uart_connectivity_test.sv(28) @ 300000000: uvm_test_top [uart_connectivity_test] UART Connectivity Test Passed
+----------------------------------------------------------------
+--- UVM Report Summary ---
+Quit count : 0
+UVM_INFO :    6
+UVM_WARNING : 0
+UVM_ERROR :   0
+UVM_FATAL :   0
+** Report : 0 errors, 0 warnings
+----------------------------------------------------------------
+Simulation PASSED: uart_connectivity_test

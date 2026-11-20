@@ -1,0 +1,17 @@
+----------------------------------------------------------------
+UVM_INFO @ 0: reporter [RNTST] Running test gpio_test...
+UVM_INFO ../soc_uvm_env/gpio_test.sv(22) @ 0: uvm_test_top [gpio_test] Executing GPIO Test
+UVM_INFO ../../tb/vip/gpio_vip_uvm_tb/gpio_vip_monitor.sv(42) @ 80000000: uvm_test_top.env.gpio_agnt.mon [GPIO_MON] Direction register configured: 0xFFFF
+UVM_INFO ../../tb/vip/gpio_vip_uvm_tb/gpio_vip_monitor.sv(50) @ 150000000: uvm_test_top.env.gpio_agnt.mon [GPIO_MON] Observed GPIO data output: 0xAA55
+UVM_INFO ../../tb/vip/gpio_vip_uvm_tb/gpio_vip_scoreboard.sv(45) @ 150000000: uvm_test_top.env.gpio_agnt.sb [GPIO_SB] GPIO PASS signature 0xAA55 verified.
+UVM_INFO ../soc_uvm_env/gpio_test.sv(28) @ 200000000: uvm_test_top [gpio_test] GPIO Test Passed
+----------------------------------------------------------------
+--- UVM Report Summary ---
+Quit count : 0
+UVM_INFO :    6
+UVM_WARNING : 0
+UVM_ERROR :   0
+UVM_FATAL :   0
+** Report : 0 errors, 0 warnings
+----------------------------------------------------------------
+Simulation PASSED: gpio_test

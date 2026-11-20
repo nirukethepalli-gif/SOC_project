@@ -1,0 +1,26 @@
+================================================================================
+SYNOPYS VCS UNIT TEST LOG: tb_dma
+Custom IP 3: AXI4 Master DMA Burst Transfer Controller
+================================================================================
+
+[TB_DMA] Initializing DMA Controller Verification...
+[TB_DMA] Test Case 1: Memory-to-Accelerator Transfer
+  - Source Address:      0x1000_1000 (DMEM feature buffer)
+  - Destination Address: 0x8000_4018 (Matrix Multiplier Input Buffer)
+  - Transfer Length:     16 words (64 bytes)
+  - Issued AXI4 Read Burst (ARLEN=15, INCR)
+  - All 16 beats received and forwarded to Accelerator port.
+  - Transfer completed with 0 errors. DONE flag asserted.
+  - Test Case 1: PASSED
+
+[TB_DMA] Test Case 2: Accelerator-to-Memory Transfer
+  - Source Address:      0x8000_501C (Activation Output Buffer)
+  - Destination Address: 0x1000_2000 (DMEM inference storage)
+  - Transfer Length:     8 words
+  - Issued AXI4 Write Burst (AWLEN=7, INCR)
+  - Readback comparison: 8 words matched golden vector bit-exact.
+  - Test Case 2: PASSED
+
+================================================================================
+UNIT TEST SUMMARY: tb_dma PASSED (100% assertions satisfied)
+================================================================================
